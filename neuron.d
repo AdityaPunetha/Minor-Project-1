@@ -1,3 +1,3 @@
 obj/neuron.o: \
- C:\Users\Rajeev\Documents\GitHub\Neural-Network-framework-using-Backpropogation-in-C/neuron.c \
- C:\Users\Rajeev\Documents\GitHub\Neural-Network-framework-using-Backpropogation-in-C/neuron.h
+ C:\Users\kevin\OneDrive\Documents\GitHub\Minor-Project-1/neuron.c \
+ C:\Users\kevin\OneDrive\Documents\GitHub\Minor-Project-1/neuron.h
