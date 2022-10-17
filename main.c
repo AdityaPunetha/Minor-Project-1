@@ -19,11 +19,13 @@ int main(void)
 
     srand(time(0));
 
+    // Get number of layers
     printf("Enter the number of Layers in Neural Network:\n");
     scanf("%d", &num_layers);
 
+    // Allocating memory for number of neurons in each layer dynamically
     num_neurons = (int *)malloc(num_layers * sizeof(int));
-    memset(num_neurons, 0, num_layers * sizeof(int));
+    memset(num_neurons, 0, num_layers * sizeof(int)); // Initialises the num_neurons array to 0
 
     // Get number of neurons per layer
     for (i = 0; i < num_layers; i++)
@@ -41,26 +43,29 @@ int main(void)
         exit(0);
     }
 
+    // Get the learning rate
     printf("Enter the learning rate (Usually 0.15): \n");
     scanf("%f", &alpha);
     printf("\n");
 
+    // Get the number of training examples
     printf("Enter the number of training examples: \n");
     scanf("%d", &num_training_ex);
     printf("\n");
 
+    // Allocating memory for input and desired output dynamically
     input = (float **)malloc(num_training_ex * sizeof(float *));
-    for (i = 0; i < num_training_ex; i++)
+    for (i = 0; i < num_training_ex; i++) // Allocating memory for each row
     {
         input[i] = (float *)malloc(num_neurons[0] * sizeof(float));
     }
-
+    // Allocating memory for desired output dynamically
     desired_outputs = (float **)malloc(num_training_ex * sizeof(float *));
     for (i = 0; i < num_training_ex; i++)
     {
         desired_outputs[i] = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
     }
-
+    // Allocating memory for cost dynamically
     cost = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
     memset(cost, 0, num_neurons[num_layers - 1] * sizeof(float));
 
@@ -70,9 +75,11 @@ int main(void)
     // Get Output Labels
     get_desired_outputs();
 
+    // Train the network
     train_neural_net();
-    test_nn();
+    test_nn(); // Test the network
 
+    // Free the memory
     if (dinit() != SUCCESS_DINIT)
     {
         printf("Error in Dinitialization...\n");
@@ -142,7 +149,7 @@ void feed_input(int i)
 int create_architecture()
 {
     int i = 0, j = 0;
-    lay = (layer *)malloc(num_layers * sizeof(layer));
+    lay = (layer *)malloc(num_layers * sizeof(layer)); // Allocating memory for layers dynamically
 
     for (i = 0; i < num_layers; i++)
     {
@@ -190,16 +197,17 @@ int initialize_weights(void)
     for (i = 0; i < num_layers - 1; i++)
     {
 
-        for (j = 0; j < num_neurons[i]; j++)
+        for (j = 0; j < num_neurons[i]; j++) // For each neuron in the layer
         {
-            for (k = 0; k < num_neurons[i + 1]; k++)
+            for (k = 0; k < num_neurons[i + 1]; k++) // For each neuron in the next layer
             {
                 // Initialize Output Weights for each neuron
-                lay[i].neu[j].out_weights[k] = ((double)rand()) / ((double)RAND_MAX);
-                printf("%d:w[%d][%d]: %f\n", k, i, j, lay[i].neu[j].out_weights[k]);
-                lay[i].neu[j].dw[k] = 0.0;
+                lay[i].neu[j].out_weights[k] = ((double)rand()) / ((double)RAND_MAX); // Randomly initialize weights
+                printf("%d:w[%d][%d]: %f\n", k, i, j, lay[i].neu[j].out_weights[k]);  // Print the weights
+                lay[i].neu[j].dw[k] = 0.0;                                            // Initialize the delta weights to 0
             }
 
+            // Initialize Bias Weights for each neuron
             if (i > 0)
             {
                 lay[i].neu[j].bias = ((double)rand()) / ((double)RAND_MAX);
@@ -207,7 +215,7 @@ int initialize_weights(void)
         }
     }
     printf("\n");
-
+    // Initialize the weights for the output layer
     for (j = 0; j < num_neurons[num_layers - 1]; j++)
     {
         lay[num_layers - 1].neu[j].bias = ((double)rand()) / ((double)RAND_MAX);
