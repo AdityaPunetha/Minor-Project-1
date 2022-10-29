@@ -1,5 +1,5 @@
-#ifndef BACKPROP_H
-#define BACKPROP_H
+// #ifndef BACKPROP_H
+// #define BACKPROP_H
 
 #include "layer.h"
 
@@ -16,7 +16,6 @@
 
 #define SUCCESS_CREATE_ARCHITECTURE 0
 #define ERR_CREATE_ARCHITECTURE 1
-
 
 int init(void);
 int dinit(void);
@@ -35,8 +34,4 @@ void test_nn(void);
 
 int initialize_dummy_weights(void);
 
-
-#endif
-
-
-
+// #endif
