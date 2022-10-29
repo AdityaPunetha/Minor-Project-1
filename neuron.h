@@ -1,5 +1,5 @@
-// #ifndef NEURON_H
-// #define NEURON_H
+#ifndef NEURON_H
+#define NEURON_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,4 +25,4 @@ typedef struct neuron_t
 
 neuron create_neuron(int num_out_weights);
 
-// #endif
+#endif

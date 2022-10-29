@@ -1,5 +1,5 @@
-// #ifndef LAYER_H
-// #define LAYER_H
+#ifndef LAYER_H
+#define LAYER_H
 
 #include "neuron.h"
 
@@ -11,4 +11,4 @@ typedef struct layer_t
 
 layer create_layer(int num_neurons);
 
-// #endif
+#endif

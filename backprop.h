@@ -1,5 +1,5 @@
-// #ifndef BACKPROP_H
-// #define BACKPROP_H
+#ifndef BACKPROP_H
+#define BACKPROP_H
 
 #include "layer.h"
 
@@ -34,4 +34,4 @@ void test_nn(void);
 
 int initialize_dummy_weights(void);
 
-// #endif
+#endif
