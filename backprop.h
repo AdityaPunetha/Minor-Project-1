@@ -3,6 +3,9 @@
 
 #include "layer.h"
 
+#define ERR_OPEN_FILE 1
+#define SUCCESS_OPEN_FILE 0
+
 #define SUCCESS_INIT 0
 #define ERR_INIT 1
 
@@ -16,6 +19,8 @@
 
 #define SUCCESS_CREATE_ARCHITECTURE 0
 #define ERR_CREATE_ARCHITECTURE 1
+
+int read_architecture(void);
 
 int init(void);
 int dinit(void);

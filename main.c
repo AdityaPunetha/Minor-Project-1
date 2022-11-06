@@ -19,19 +19,28 @@ int main(void)
 
     srand(time(0));
 
-    // Get number of layers
-    printf("Enter the number of Layers in Neural Network:\n");
-    scanf("%d", &num_layers);
-
-    // Allocating memory for number of neurons in each layer dynamically
-    num_neurons = (int *)malloc(num_layers * sizeof(int));
-    memset(num_neurons, 0, num_layers * sizeof(int)); // Initialises the num_neurons array to 0
-
-    // Get number of neurons per layer
-    for (i = 0; i < num_layers; i++)
+    printf("Read architecture from file? (y/n): ");
+    if (getchar() == 'y')
     {
-        printf("Enter number of neurons in layer[%d]: \n", i + 1);
-        scanf("%d", &num_neurons[i]);
+        read_architecture();
+        // printf("Not implemented yet");
+    }
+    else
+    {
+        // Get number of layers
+        printf("Enter the number of Layers in Neural Network:\n");
+        scanf("%d", &num_layers);
+
+        // Allocating memory for number of neurons in each layer dynamically
+        num_neurons = (int *)malloc(num_layers * sizeof(int));
+        memset(num_neurons, 0, num_layers * sizeof(int)); // Initialises the num_neurons array to 0
+
+        // Get number of neurons per layer
+        for (i = 0; i < num_layers; i++)
+        {
+            printf("Enter number of neurons in layer[%d]: \n", i + 1);
+            scanf("%d", &num_neurons[i]);
+        }
     }
 
     printf("\n");
@@ -86,6 +95,29 @@ int main(void)
     }
 
     return 0;
+}
+
+int read_architecture()
+{
+    FILE *fp;
+    int i;
+
+    fp = fopen("architecture.txt", "r");
+    if (fp == NULL)
+    {
+        printf("Error in opening file...\n");
+        return ERR_OPEN_FILE;
+    }
+
+    fscanf(fp, "%d", &num_layers);
+    num_neurons = (int *)malloc(num_layers * sizeof(int));
+    for (i = 0; i < num_layers; i++)
+    {
+        fscanf(fp, "%d", &num_neurons[i]);
+    }
+
+    fclose(fp);
+    return SUCCESS_OPEN_FILE;
 }
 
 int init()
