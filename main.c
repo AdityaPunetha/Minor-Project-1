@@ -1,6 +1,8 @@
 #include "backprop.h"
 #include "layer.h"
 #include "neuron.h"
+#define ARCHITECTURE_FILE "architecture.txt"
+#define TRAINING_DATA "train_data.txt"
 
 layer *lay = NULL;
 int num_layers;
@@ -12,6 +14,7 @@ float **input;
 float **desired_outputs;
 int num_training_ex;
 int n = 1;
+char choice;
 
 int main(void)
 {
@@ -20,7 +23,8 @@ int main(void)
     srand(time(0));
 
     printf("Read architecture from file? (y/n): ");
-    if (getchar() == 'y')
+    scanf(" %c", &choice);
+    if (choice == 'y')
     {
         read_architecture();
         // printf("Not implemented yet");
@@ -57,33 +61,42 @@ int main(void)
     scanf("%f", &alpha);
     printf("\n");
 
-    // Get the number of training examples
-    printf("Enter the number of training examples: \n");
-    scanf("%d", &num_training_ex);
-    printf("\n");
+    // Read the training data from file
+    printf("Read training data from file? (y/n): ");
+    scanf(" %c", &choice);
 
-    // Allocating memory for input and desired output dynamically
-    input = (float **)malloc(num_training_ex * sizeof(float *));
-    for (i = 0; i < num_training_ex; i++) // Allocating memory for each row
+    if (choice == 'y')
     {
-        input[i] = (float *)malloc(num_neurons[0] * sizeof(float));
+        read_training_data();
     }
-    // Allocating memory for desired output dynamically
-    desired_outputs = (float **)malloc(num_training_ex * sizeof(float *));
-    for (i = 0; i < num_training_ex; i++)
+    else
     {
-        desired_outputs[i] = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
+
+        // Get the number of training examples
+        printf("Enter the number of training examples: \n");
+        scanf("%d", &num_training_ex);
+        printf("\n");
+
+        // Allocating memory for input and desired output dynamically
+        input = (float **)malloc(num_training_ex * sizeof(float *));
+        for (i = 0; i < num_training_ex; i++) // Allocating memory for each row
+        {
+            input[i] = (float *)malloc(num_neurons[0] * sizeof(float));
+        }
+        // Allocating memory for desired output dynamically
+        desired_outputs = (float **)malloc(num_training_ex * sizeof(float *));
+        for (i = 0; i < num_training_ex; i++)
+        {
+            desired_outputs[i] = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
+        }
+        // Allocating memory for cost dynamically
+        cost = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
+        memset(cost, 0, num_neurons[num_layers - 1] * sizeof(float));
+
+        // Get the training data
+        get_inputs();
+        get_desired_outputs();
     }
-    // Allocating memory for cost dynamically
-    cost = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
-    memset(cost, 0, num_neurons[num_layers - 1] * sizeof(float));
-
-    // Get Training Examples
-    get_inputs();
-
-    // Get Output Labels
-    get_desired_outputs();
-
     // Train the network
     train_neural_net();
     test_nn(); // Test the network
@@ -102,7 +115,7 @@ int read_architecture()
     FILE *fp;
     int i;
 
-    fp = fopen("architecture.txt", "r");
+    fp = fopen(ARCHITECTURE_FILE, "r");
     if (fp == NULL)
     {
         printf("Error in opening file...\n");
@@ -130,6 +143,52 @@ int init()
 
     printf("Neural Network Created Successfully...\n\n");
     return SUCCESS_INIT;
+}
+
+// Read the training data from file
+int read_training_data()
+{
+    FILE *fp;
+    int i, j;
+
+    fp = fopen(TRAINING_DATA, "r");
+    if (fp == NULL)
+    {
+        printf("Error in opening file...\n");
+        return ERR_OPEN_FILE;
+    }
+
+    fscanf(fp, "%d", &num_training_ex);
+    // Allocating memory for input and desired output dynamically
+    input = (float **)malloc(num_training_ex * sizeof(float *));
+    for (i = 0; i < num_training_ex; i++) // Allocating memory for each row
+    {
+        input[i] = (float *)malloc(num_neurons[0] * sizeof(float));
+    }
+    // Allocating memory for desired output dynamically
+    desired_outputs = (float **)malloc(num_training_ex * sizeof(float *));
+    for (i = 0; i < num_training_ex; i++)
+    {
+        desired_outputs[i] = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
+    }
+    // Allocating memory for cost dynamically
+    cost = (float *)malloc(num_neurons[num_layers - 1] * sizeof(float));
+    memset(cost, 0, num_neurons[num_layers - 1] * sizeof(float));
+
+    for (i = 0; i < num_training_ex; i++)
+    {
+        for (j = 0; j < num_neurons[0]; j++)
+        {
+            fscanf(fp, "%f", &input[i][j]);
+        }
+        for (j = 0; j < num_neurons[num_layers - 1]; j++)
+        {
+            fscanf(fp, "%f", &desired_outputs[i][j]);
+        }
+    }
+
+    fclose(fp);
+    return SUCCESS_OPEN_FILE;
 }
 
 // Get Inputs

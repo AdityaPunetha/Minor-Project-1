@@ -27,6 +27,9 @@ int dinit(void);
 
 int create_architecture(void);
 int initialize_weights(void);
+
+int read_training_data(void);
+
 void feed_input(int i);
 void train_neural_net(void);
 void forward_prop(void);
