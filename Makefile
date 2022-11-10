@@ -8,9 +8,9 @@ CXXFLAGS = -std=c11 -Wall
 LDFLAGS = 
 
 # Makefile settings - Can be customized.
-APPNAME = NeuralNetwork
+APPNAME = neuralNetwork
 EXT = .c
-SRCDIR = C:\Users\Rajeev\Documents\GitHub\Minor-Project-1
+SRCDIR = C:\Users\kevin\OneDrive\Documents\GitHub\Minor-Project-1
 OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############

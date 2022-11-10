@@ -98,8 +98,15 @@ int main(void)
         get_desired_outputs();
     }
     // Train the network
-    train_neural_net();
-    test_nn(); // Test the network
+    // train_neural_net();
+    // test_nn(); // Test the network
+
+    for (int i = 0; i < 4; i++)
+        // {
+        //     for (int j = 0; j < num_neurons[0]; j++)
+
+        printf("%f ", desired_outputs[i][0]);
+    // }
 
     // Free the memory
     if (dinit() != SUCCESS_DINIT)
@@ -181,12 +188,14 @@ int read_training_data()
         {
             fscanf(fp, "%f", &input[i][j]);
         }
+    }
+    for (i = 0; i < num_training_ex; i++)
+    {
         for (j = 0; j < num_neurons[num_layers - 1]; j++)
         {
             fscanf(fp, "%f", &desired_outputs[i][j]);
         }
     }
-
     fclose(fp);
     return SUCCESS_OPEN_FILE;
 }
@@ -322,7 +331,7 @@ void train_neural_net(void)
     int it = 0;
 
     // Gradient Descent
-    for (it = 0; it < 20000; it++)
+    for (it = 0; it < 200; it++)
     {
         for (i = 0; i < num_training_ex; i++)
         {
