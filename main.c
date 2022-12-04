@@ -3,6 +3,7 @@
 #include "neuron.h"
 #define ARCHITECTURE_FILE "architecture.txt"
 #define TRAINING_DATA "train_data.txt"
+#define TEST_DATA "test_data.txt"
 
 layer *lay = NULL;
 int num_layers;
@@ -98,21 +99,8 @@ int main(void)
         get_desired_outputs();
     }
     // Train the network
-    // train_neural_net();
-    // test_nn(); // Test the network
-
-    for (int i = 0; i < 4; i++)
-        // {
-        //     for (int j = 0; j < num_neurons[0]; j++)
-
-        printf("%f ", desired_outputs[i][0]);
-    // }
-
-    // Free the memory
-    if (dinit() != SUCCESS_DINIT)
-    {
-        printf("Error in Dinitialization...\n");
-    }
+    train_neural_net();
+    test_nn(); // Test the network
 
     return 0;
 }
@@ -337,7 +325,6 @@ void train_neural_net(void)
         {
             feed_input(i);
             forward_prop();
-            compute_cost(i);
             back_prop(i);
             update_weights();
         }
@@ -404,25 +391,6 @@ void forward_prop(void)
     }
 }
 
-// Compute Total Cost
-void compute_cost(int i)
-{
-    int j;
-    float tmpcost = 0;
-    float tcost = 0;
-
-    for (j = 0; j < num_neurons[num_layers - 1]; j++)
-    {
-        tmpcost = desired_outputs[i][j] - lay[num_layers - 1].neu[j].actv;
-        cost[j] = (tmpcost * tmpcost) / 2;
-        tcost = tcost + cost[j];
-    }
-
-    full_cost = (full_cost + tcost) / n;
-    n++;
-    // printf("Full Cost: %f\n",full_cost);
-}
-
 // Back Propogate Error
 void back_prop(int p)
 {
@@ -475,25 +443,80 @@ void back_prop(int p)
 void test_nn(void)
 {
     int i;
-    while (1)
-    {
-        printf("Enter input to test:\n");
+    int it = 0;
+    char c;
 
-        for (i = 0; i < num_neurons[0]; i++)
+    printf("Read Test Data from File (y/n): ");
+    scanf(" %c", &c);
+
+    if (c == 'y')
+    {
+        read_test_data();
+    }
+
+    else
+    {
+        printf("Enter number of test cases: ");
+        scanf("%d", &it);
+        for (int ix = 0; ix < it; ix++)
         {
-            scanf("%f", &lay[0].neu[i].actv);
+            printf("Enter input to test:\n");
+
+            for (i = 0; i < num_neurons[0]; i++)
+            {
+                scanf("%f", &lay[0].neu[i].actv);
+            }
+            forward_prop();
         }
-        forward_prop();
     }
 }
 
-// TODO: Add different Activation functions
-// void activation_functions()
-
-int dinit(void)
+// Read Test Data from File
+void read_test_data(void)
 {
-    // TODO:
-    // Free up all the structures
+    int i, it;
+    FILE *fp;
 
-    return SUCCESS_DINIT;
+    fp = fopen(TEST_DATA, "r");
+
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+    }
+
+    else
+    {
+        fscanf(fp, "%d", &it);
+        for (int ix = 0; ix < it; ix++)
+        {
+            for (i = 0; i < num_neurons[0]; i++)
+            {
+                fscanf(fp, "%f", &lay[0].neu[i].actv);
+            }
+            forward_prop();
+        }
+    }
+}
+
+// Different Activation functions
+float sigmoid(float x)
+{
+    return 1 / (1 + exp(-x));
+}
+
+float relu(float x)
+{
+    if (x < 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return x;
+    }
+}
+
+float tan_h(float x)
+{
+    return (exp(x) - exp(-x)) / (exp(x) + exp(-x));
 }
